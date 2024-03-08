@@ -11,6 +11,11 @@ export const GET_PRODUCTS = gql`
           id
           source
         }
+        variants {
+          id
+          price
+          stockLevel
+        }
       }
     }
   }

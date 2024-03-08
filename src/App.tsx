@@ -1,15 +1,19 @@
+import { ThemeProvider } from '@mui/material/styles';
+
+import theme from './styles/theme';
+
 import { Header } from './components/Header';
 import { ProductList } from './components/ProductList';
 
-function App() {
+const App = () => {
   return (
-    <>
-      <Header></Header>
+    <ThemeProvider theme={theme}>
+      <Header />
       <div>
-        <ProductList></ProductList>
+        <ProductList />
       </div>
-    </>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;

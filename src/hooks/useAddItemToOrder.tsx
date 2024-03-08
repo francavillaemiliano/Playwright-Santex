@@ -4,9 +4,9 @@ import { ADD_ITEM_TO_ORDER } from '../graphql/mutations';
 const useAddItemToOrder = () => {
   const [addItemToOrderMutation] = useMutation(ADD_ITEM_TO_ORDER);
 
-  const addItemToOrder = (productId: number) => {
+  const addItemToOrder = (productId: number, quantity: number) => {
     return addItemToOrderMutation({
-      variables: { productId },
+      variables: { productVariantId: productId, quantity: quantity },
     });
   };
 
