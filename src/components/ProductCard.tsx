@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import {
   Button,
   Typography,
@@ -11,9 +10,7 @@ import {
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
 
 import { styled } from '@mui/system';
-
-import { useMutation } from '@apollo/client';
-import { ADD_ITEM_TO_ORDER } from '../graphql/mutations';
+import { useOrder } from '../contextAPI/OrderContext';
 
 import IncrementButton from './IncrementButton';
 
@@ -23,6 +20,8 @@ interface Product {
   name: string;
   assets: Asset[];
   variants: ProductVariant[];
+  totalQuantity: number;
+  total: number;
 }
 
 interface ProductVariant {
@@ -36,6 +35,22 @@ interface Asset {
   id: string;
   source: string;
 }
+const StyledCard = styled(Card)`
+  filter: grayscale(20%);
+  transition: filter 0.3s ease-in-out;
+  width: 100%;
+  border: 1px solid lightgrey;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.25rem;
+
+  &:hover {
+    filter: none;
+    border: 1px solid grey;
+  }
+`;
 
 const StyledDescription = styled(Typography)`
   overflow: hidden;
@@ -46,10 +61,10 @@ const StyledDescription = styled(Typography)`
 `;
 
 const ProductCard = ({ product }: { product: Product }) => {
-  const [addItemToOrderMutation] = useMutation(ADD_ITEM_TO_ORDER);
+  const { addItemToOrder } = useOrder();
+  const [quantity, setQuantity] = useState<number>(0);
   const isProductInStock = product.variants[0]?.stockLevel === 'IN_STOCK';
 
-  const [quantity, setQuantity] = useState<number>(0);
   const handleIncrement = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
@@ -59,28 +74,16 @@ const ProductCard = ({ product }: { product: Product }) => {
     setQuantity((prevQuantity) => prevQuantity - 1);
   };
 
-  const handleAddToOrder = (productVariantId: string, quantity: number) => {
-    addItemToOrderMutation({
-      variables: { productVariantId, quantity },
-    })
-      .then((response) => {
-        console.log('se agrega al carrito');
-      })
-      .catch((error) => {});
+  const handleAddToOrder = () => {
+    const productWithQuantity: Product = {
+      ...product,
+      totalQuantity: quantity,
+    };
+    addItemToOrder(productWithQuantity);
   };
 
   return (
-    <Card
-      sx={{
-        width: '100%',
-        border: '1px solid lightgrey',
-        minHeight: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: '0.25rem',
-      }}
-    >
+    <StyledCard>
       <CardContent>
         <CardMedia>
           {product.assets?.length > 0 && (
@@ -90,6 +93,7 @@ const ProductCard = ({ product }: { product: Product }) => {
               style={{
                 height: '150px',
                 width: '100%',
+                borderRadius: '5px',
                 objectFit: 'cover',
                 objectPosition: 'center',
                 marginBottom: '25px',
@@ -101,11 +105,14 @@ const ProductCard = ({ product }: { product: Product }) => {
         <Typography variant="h6" gutterBottom>
           {product.name}
         </Typography>
+        {!isProductInStock && (
+          <Typography color="primary" variant="body1">
+            Sin Stock
+          </Typography>
+        )}
         <Typography variant="body1" gutterBottom>
-          {product.variants[0]?.currencyCode}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          {product.variants[0]?.price}
+          {product.variants.find((variant) => variant)?.currencyCode}
+          {product.variants.find((variant) => variant)?.price}
         </Typography>
         <StyledDescription variant="body2" gutterBottom>
           {product.description}
@@ -122,11 +129,12 @@ const ProductCard = ({ product }: { product: Product }) => {
           quantity={quantity}
           onIncrement={handleIncrement}
           onDecrement={handleDecrement}
+          disabled={!isProductInStock}
         />
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => handleAddToOrder(product.variants[0]?.id, quantity)}
+          onClick={() => handleAddToOrder(product)}
           disabled={!isProductInStock}
           sx={{ borderRadius: '2rem' }}
         >
@@ -134,7 +142,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           Agregar
         </Button>
       </CardActions>
-    </Card>
+    </StyledCard>
   );
 };
 

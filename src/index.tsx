@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 import {
   ApolloClient,
   ApolloLink,
@@ -5,11 +8,12 @@ import {
   InMemoryCache,
 } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
-import React from 'react';
-import ReactDOM from 'react-dom';
+
+import reportWebVitals from './reportWebVitals';
+import { OrderProvider } from './contextAPI/OrderContext';
+
 import App from './App';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
 
 const commerceLink = createHttpLink({
   uri: 'https://demo.vendure.io/shop-api/shop-api',
@@ -40,7 +44,9 @@ const client = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <OrderProvider>
+        <App />
+      </OrderProvider>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
