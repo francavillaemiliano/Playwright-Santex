@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
 interface Product {
+  variants: any;
   id: number;
   name: string;
   total: number;
@@ -9,11 +10,13 @@ interface Product {
 
 interface OrderContextType {
   order: Product[];
+  setOrder: React.Dispatch<React.SetStateAction<Product[]>>;
   addItemToOrder: (product: Product) => void;
 }
 
 const OrderContext = createContext<OrderContextType>({
   order: [],
+  setOrder: () => {},
   addItemToOrder: (product) => {},
 });
 
@@ -39,7 +42,7 @@ export const OrderProvider: React.FC = ({ children }) => {
   };
 
   return (
-    <OrderContext.Provider value={{ order, addItemToOrder }}>
+    <OrderContext.Provider value={{ order, setOrder, addItemToOrder }}>
       {children}
     </OrderContext.Provider>
   );

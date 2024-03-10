@@ -2,7 +2,9 @@ import React from 'react';
 import {
   AppBar,
   Badge,
+  Box,
   Button,
+  Divider,
   Drawer,
   IconButton,
   List,
@@ -10,19 +12,28 @@ import {
   ListItemText,
   Paper,
   Toolbar,
+  Typography,
 } from '@mui/material';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
+import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
+import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+
 import { useOrder } from '../contextAPI/OrderContext';
+import { Stack } from '@mui/system';
 
 const Header = () => {
-  const { order } = useOrder();
-
-  console.log(order, 'ORDER ITEMS');
+  const { order, setOrder } = useOrder();
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const itemsTotal = order.reduce((acc, item) => acc + item.totalQuantity, 0);
 
   const handleToggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
+  };
+
+  const handleEmptyCart = () => {
+    setOrder([]);
+    setIsDrawerOpen(false);
   };
 
   return (
@@ -42,44 +53,126 @@ const Header = () => {
             style={{ height: '30px' }}
           />
           <IconButton color="inherit" onClick={handleToggleDrawer}>
-            <Badge badgeContent={order.length} color="error">
+            <Badge badgeContent={itemsTotal} color="error">
               <ShoppingCartRoundedIcon />
             </Badge>
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Drawer
-        anchor="right"
-        open={isDrawerOpen}
-        onClose={handleToggleDrawer}
-        variant="persistent"
-        sx={{ width: '400px', padding: '20px' }}
-      >
-        <Paper sx={{ width: '400px', padding: '20px', height: '100%' }}>
+      <Drawer anchor="right" open={isDrawerOpen} onClose={handleToggleDrawer}>
+        <Paper
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '25rem',
+            padding: '2rem',
+            height: '100%',
+          }}
+        >
           <IconButton
-            sx={{ position: 'absolute', top: '10px', left: '10px' }}
+            sx={{ position: 'absolute', top: '1rem', right: '1rem' }}
             onClick={handleToggleDrawer}
           >
-            <CloseRoundedIcon />
+            <CloseRoundedIcon color="primary" />
           </IconButton>
-          <List>
-            {order.map((item, index) => (
-              <ListItem key={index}>
-                <ListItemText>{`${item.totalQuantity} - ${item.name} - ${item.variants}`}</ListItemText>
-              </ListItem>
-            ))}
-          </List>
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{
-              borderRadius: '2rem',
-              marginTop: '1rem',
-              width: '80%',
-            }}
-          >
-            COMPRAR
-          </Button>
+          {itemsTotal === 0 && (
+            <Box
+              sx={{
+                height: '20%',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <LocalMallOutlinedIcon />
+              <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                There're no items in your
+              </Typography>
+              <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                cart, add some
+              </Typography>{' '}
+            </Box>
+          )}
+          {itemsTotal !== 0 && (
+            <>
+              <Typography variant="h6" gutterBottom>
+                Order:
+              </Typography>
+              <List sx={{ width: '100%' }}>
+                <ListItem
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(2, 1fr)',
+                    gap: 1,
+                  }}
+                >
+                  <ListItemText>Description:</ListItemText>
+                  <ListItemText>Subtotal:</ListItemText>
+                </ListItem>
+
+                {order.map((item, index) => (
+                  <>
+                    <ListItem
+                      key={index}
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: '2fr 1fr 0.25fr',
+                        gap: 3,
+                      }}
+                    >
+                      <Typography variant="body1">
+                        {`${item.totalQuantity} x ${item.name}`}{' '}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{ justifySelf: 'end' }}
+                      >{` ${item.total}`}</Typography>
+                      <IconButton
+                        color="secondary"
+                        sx={{ height: '30px', width: '30px' }}
+                      >
+                        <RemoveCircleOutlineOutlinedIcon />
+                      </IconButton>
+                    </ListItem>
+                    <Divider />
+                  </>
+                ))}
+              </List>
+              <Stack
+                direction="column"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  sx={{
+                    borderRadius: '2rem',
+                    marginTop: '1rem',
+                    width: '60%',
+                  }}
+                >
+                  Send Order
+                </Button>
+                <Button
+                  variant="text"
+                  color="primary"
+                  sx={{
+                    borderRadius: '2rem',
+                    marginTop: '1rem',
+                  }}
+                  onClick={handleEmptyCart}
+                >
+                  Empty Cart
+                </Button>
+              </Stack>
+            </>
+          )}
         </Paper>
       </Drawer>
     </>
