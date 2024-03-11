@@ -1,27 +1,28 @@
 import { useState } from 'react';
 
-export const useStateWithStorage = <T,>(
+// interface Product {
+//   currency: string;
+//   id: string;
+//   name: string;
+//   total: number;
+//   subtotal: number;
+//   totalQuantity: number;
+//   variants: {};
+// }
+
+export function useStateWithStorage<Type>(
   key: string,
-  initialValue: T
-): [T, (value: T) => void] => {
-  const [state, setState] = useState<T>(() => {
-    try {
-      const storedData = localStorage.getItem(key);
-      return storedData ? JSON.parse(storedData) : initialValue;
-    } catch (error) {
-      console.error('Error parsing stored data:', error);
-      return initialValue;
-    }
+  initialValue: Type[]
+): [Type[], (value: Type[]) => void] {
+  const [state, setState] = useState<Type[]>(() => {
+    const storedData = localStorage.getItem(key);
+    return storedData ? JSON.parse(storedData) : initialValue;
   });
 
-  const setStateWithStorage = (newValue: T) => {
-    try {
-      setState(newValue);
-      localStorage.setItem(key, JSON.stringify(newValue));
-    } catch (error) {
-      console.error('Error storing data:', error);
-    }
+  const setStateWithStorage = (newValue: Type[]) => {
+    setState(newValue);
+    localStorage.setItem(key, JSON.stringify(newValue));
   };
 
   return [state, setStateWithStorage];
-};
+}

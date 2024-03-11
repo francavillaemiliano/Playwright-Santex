@@ -198,7 +198,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
       {isDialogOpen && (
         <Dialog open={isDialogOpen} onClose={handleClose}>
           <DialogContent>
-            Are you sure you want to remove{' '}
+            Are you sure you want to remove item/s:{' '}
             {itemIdToRemove && (
               <strong>
                 {order.find((item) => item.id === itemIdToRemove)?.name}

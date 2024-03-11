@@ -9,7 +9,7 @@ const ProductList = () => {
   const { loading, error, data } = useQuery(GET_PRODUCTS, {
     variables: {
       options: {
-        take: 20,
+        take: 10,
         skip: 0,
       },
     },

@@ -19,29 +19,7 @@ import { useOrder } from '../contextAPI/OrderContext';
 import priceFormatter from '../utils/priceFormatter';
 
 import IncrementButton from './IncrementButton';
-
-interface Product {
-  id: string;
-  description: string;
-  name: string;
-  assets: Asset[];
-  variants: ProductVariant[];
-  totalQuantity: number;
-  total: number;
-  subtotal: number;
-}
-
-interface ProductVariant {
-  id: string;
-  price: number;
-  currencyCode: string;
-  stockLevel: string;
-}
-
-interface Asset {
-  id: string;
-  source: string;
-}
+import { ProductVariant, Product, OrderContextType } from '../utils/types';
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -114,14 +92,14 @@ const ProductCard = ({ product }: { product: Product }) => {
         updatedOrder[duplicatedItemIndex] = updatedItem;
         setOrder(updatedOrder);
       } else {
-        const cartItem = {
+        const cartItem: Product = {
           currency: product.variants[0]?.currencyCode,
           id: product.id.toString(),
           name: product.name,
           total: product.variants[0]?.price,
           subtotal: product.variants[0]?.price * quantity,
           totalQuantity: quantity,
-          variants: product.variants[0],
+          variants: product.variants,
         };
         addItemToOrder(cartItem);
       }
@@ -148,7 +126,7 @@ const ProductCard = ({ product }: { product: Product }) => {
       <StyledCard>
         <CardContent>
           <CardMedia>
-            {product.assets?.length > 0 && (
+            {product.assets && product.assets.length > 0 && (
               <img
                 src={product.assets[0]?.source}
                 alt={product.name}

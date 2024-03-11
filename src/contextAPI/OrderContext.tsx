@@ -1,22 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useStateWithStorage } from '../hooks/useStateWithStorage';
-interface Product {
-  currency: string;
-  id: string;
-  name: string;
-  total: number;
-  subtotal: number;
-  totalQuantity: number;
-  variants: {};
-}
-
-interface OrderContextType {
-  order: Product[];
-  setOrder: React.Dispatch<React.SetStateAction<Product[]>>;
-  addItemToOrder: (product: Product) => void;
-  totalPriceOrder: number;
-  currency: string;
-}
+import { Product, OrderContextType } from '../utils/types';
 
 const OrderContext = createContext<OrderContextType>({
   addItemToOrder: (product) => {},
@@ -29,30 +13,35 @@ const OrderContext = createContext<OrderContextType>({
 export const useOrder = () => useContext(OrderContext);
 
 export const OrderProvider: React.FC = ({ children }) => {
-  const [order, setOrder] = useStateWithStorage<Product[]>('order', []);
-  const totalPriceOrder = order.reduce((acc, item) => acc + item.subtotal, 0);
+  const [order, setOrder] = useStateWithStorage<Product>('order', []);
+
   const currency = 'USD';
-  console.log(order, 'orden');
 
   const addItemToOrder = (product: Product) => {
-    setOrder((prevOrder) => {
-      const existingProductIndex = prevOrder.findIndex(
-        (p) => p.id === product.id
-      );
-      if (existingProductIndex !== -1) {
-        const updatedOrder = [...prevOrder];
-        updatedOrder[existingProductIndex].totalQuantity +=
-          product.totalQuantity;
-        return updatedOrder;
-      } else {
-        return [...prevOrder, product];
-      }
-    });
+    let newOrder: Product[];
+    const existingProductIndex = order.findIndex((p) => p.id === product.id);
+    if (existingProductIndex !== -1) {
+      const updatedOrder = [...order];
+      updatedOrder[existingProductIndex].totalQuantity += product.totalQuantity;
+      newOrder = updatedOrder;
+    } else {
+      newOrder = [...order, product];
+    }
+
+    setOrder(newOrder);
   };
+
+  const totalPriceOrder = order.reduce((acc, item) => acc + item.subtotal, 0);
 
   return (
     <OrderContext.Provider
-      value={{ order, setOrder, addItemToOrder, totalPriceOrder, currency }}
+      value={{
+        order,
+        setOrder,
+        addItemToOrder,
+        totalPriceOrder,
+        currency,
+      }}
     >
       {children}
     </OrderContext.Provider>
