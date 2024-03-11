@@ -9,21 +9,26 @@ import {
   CardActions,
   Snackbar,
 } from '@mui/material';
+import { useMutation } from '@apollo/client';
+import { ADD_ITEM_TO_ORDER } from '../graphql/mutations';
+
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
+import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/system';
 import { useOrder } from '../contextAPI/OrderContext';
-import usePriceFormatter from '../hooks/usePriceFormatter';
+import priceFormatter from '../utils/priceFormatter';
 
 import IncrementButton from './IncrementButton';
 
 interface Product {
-  id: number;
+  id: string;
   description: string;
   name: string;
   assets: Asset[];
   variants: ProductVariant[];
   totalQuantity: number;
   total: number;
+  subtotal: number;
 }
 
 interface ProductVariant {
@@ -37,6 +42,7 @@ interface Asset {
   id: string;
   source: string;
 }
+
 const StyledCard = styled(Card)`
   width: 100%;
   border: 1px solid lightgrey;
@@ -60,14 +66,19 @@ const StyledDescription = styled(Typography)`
 `;
 
 const ProductCard = ({ product }: { product: Product }) => {
-  const { addItemToOrder } = useOrder();
-  const total = usePriceFormatter(
+  const { addItemToOrder, setOrder, order } = useOrder();
+
+  const [addItemToOrderMutation] = useMutation(ADD_ITEM_TO_ORDER);
+  const theme = useTheme();
+
+  const customBackgroundColor = theme.palette.primary.light;
+  const [quantity, setQuantity] = useState<number>(0);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const formattedPrice = priceFormatter(
     product.variants[0]?.price,
     product.variants[0]?.currencyCode
   );
   const isProductInStock = product.variants[0]?.stockLevel === 'IN_STOCK';
-  const [quantity, setQuantity] = useState<number>(0);
-  const [alertOpen, setAlertOpen] = React.useState(false);
 
   const handleIncrement = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -78,29 +89,59 @@ const ProductCard = ({ product }: { product: Product }) => {
     setQuantity((prevQuantity) => prevQuantity - 1);
   };
 
-  const handleAddToOrder = () => {
-    const lineItem = {
-      id: product.id,
-      name: product.name,
-      variants: product.variants[0],
-      currency: product.variants[0].currencyCode,
-      totalQuantity: quantity,
-      total: total,
-    };
-    addItemToOrder(lineItem);
-    setQuantity(0);
-    setAlertOpen(true);
+  const handleAddToOrder = async (productId: string, quantity: number) => {
+    try {
+      await addItemToOrderMutation({
+        variables: { productVariantId: productId, quantity: quantity },
+      });
+
+      const duplicatedItemIndex = order.findIndex(
+        (item) => item.id === product.id
+      );
+
+      if (duplicatedItemIndex !== -1) {
+        const duplicatedItem = order[duplicatedItemIndex];
+        const updatedQuantity = duplicatedItem.totalQuantity + quantity;
+        const updatedSubtotal = product.variants[0]?.price * updatedQuantity;
+
+        const updatedItem = {
+          ...duplicatedItem,
+          totalQuantity: updatedQuantity,
+          subtotal: updatedSubtotal,
+        };
+
+        const updatedOrder = [...order];
+        updatedOrder[duplicatedItemIndex] = updatedItem;
+        setOrder(updatedOrder);
+      } else {
+        const cartItem = {
+          currency: product.variants[0]?.currencyCode,
+          id: product.id.toString(),
+          name: product.name,
+          total: product.variants[0]?.price,
+          subtotal: product.variants[0]?.price * quantity,
+          totalQuantity: quantity,
+          variants: product.variants[0],
+        };
+        addItemToOrder(cartItem);
+      }
+
+      setQuantity(0);
+      setAlertOpen(true);
+    } catch (error) {
+      console.error('Error adding item to order:', error);
+    }
   };
 
   return (
     <>
       <Snackbar
         open={alertOpen}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={() => setAlertOpen(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <Alert severity="success" onClose={() => setAlertOpen(false)}>
+        <Alert icon={false} sx={{ backgroundColor: customBackgroundColor }}>
           Item was successfully added to the cart
         </Alert>
       </Snackbar>
@@ -127,11 +168,11 @@ const ProductCard = ({ product }: { product: Product }) => {
           </Typography>
           {!isProductInStock && (
             <Typography color="primary" variant="body1">
-              Sin Stock
+              No Stock
             </Typography>
           )}
           <Typography variant="body1" gutterBottom>
-            {total}
+            {formattedPrice}
           </Typography>
           <StyledDescription variant="body2" gutterBottom>
             {product.description}
@@ -153,7 +194,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleAddToOrder()}
+            onClick={() => handleAddToOrder(product.id, quantity)}
             disabled={!isProductInStock}
             sx={{ borderRadius: '2rem' }}
           >
