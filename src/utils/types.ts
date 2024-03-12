@@ -37,12 +37,3 @@ export interface Page {
   totalPages: number;
   onPageChange?: (newPage: number) => void;
 }
-export interface ScrollOptions {
-  fetchMore: () => void;
-  containerRef: RefObject<HTMLDivElement>;
-  currentPage: number;
-  totalPages: number;
-  loading: boolean;
-  pageSize: number;
-  isSmallScreen: boolean;
-}
