@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 export interface ProductVariant {
   id: string;
   price: number;
@@ -28,4 +30,19 @@ export interface OrderContextType {
 export interface Asset {
   id: string;
   source: string;
+}
+
+export interface Page {
+  currentPage: number;
+  totalPages: number;
+  onPageChange?: (newPage: number) => void;
+}
+export interface ScrollOptions {
+  fetchMore: () => void;
+  containerRef: RefObject<HTMLDivElement>;
+  currentPage: number;
+  totalPages: number;
+  loading: boolean;
+  pageSize: number;
+  isSmallScreen: boolean;
 }

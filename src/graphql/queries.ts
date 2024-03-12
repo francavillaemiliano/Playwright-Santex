@@ -12,9 +12,6 @@ export const GET_PRODUCTS = gql`
           id
           source
         }
-        collections {
-          name
-        }
         variants {
           id
           currencyCode
