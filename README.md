@@ -1,4 +1,4 @@
-# Santex RBI Team - Front End Training Challenge
+# Front End Training Challenge
 
 Quick challenge to help candidates to join RBI Team to catch up with currently used technologies
 
@@ -15,7 +15,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Requirements
 
 - Implement a home page with a grid of products that includes product picture, description and price (from any product variant). Hint: use Graphql query.
-- Create a "Buy" button for each product in the greed and implement a mutation to update an order everytime a user clicks on that button.
+- Create a "Buy" button for each product in the grid and implement a mutation to update an order everytime a user clicks on that button.
   The mutation is called `addItemToOrder`. Hint: look into the API documentation section of this document
 - Implement app header component that includes the subtotal of the current order and persists through page refresh. Hint: use Graphql mutation and Context API
 - Add custom hook named `useStateWithStorage` with same API as `useState` hook but adding local storage capabilities. Can be used for header subtotal
