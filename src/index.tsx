@@ -12,6 +12,9 @@ import { ApolloProvider } from '@apollo/client/react';
 import reportWebVitals from './reportWebVitals';
 import { OrderProvider } from './contextAPI/OrderContext';
 
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './styles/theme';
+
 import App from './App';
 import './index.css';
 
@@ -45,7 +48,9 @@ ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <OrderProvider>
-        <App />
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
       </OrderProvider>
     </ApolloProvider>
   </React.StrictMode>,

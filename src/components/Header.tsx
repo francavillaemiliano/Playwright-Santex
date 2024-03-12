@@ -1,14 +1,30 @@
 import React from 'react';
-import { AppBar, Badge, IconButton, Toolbar, Typography } from '@mui/material';
-import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
-import CustomDrawer from './CustomDrawer';
+
 import { useOrder } from '../contextAPI/OrderContext';
 import priceFormatter from '../utils/priceFormatter';
+import CustomDrawer from './CustomDrawer';
+
+import { AppBar, Badge, IconButton, Toolbar, Typography } from '@mui/material';
+import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
+import styled from 'styled-components';
+
+const StyledAppBar = styled(AppBar)`
+  width: 100%;
+  position: fixed;
+`;
+
+const StyledToolbar = styled(Toolbar)`
+  && {
+    display: grid;
+    grid-template-columns: 2fr 0.5fr 0.5fr;
+    align-items: center;
+    justify-items: center;
+  }
+`;
 
 const Header = () => {
   const { order } = useOrder();
 
-  console.log(order, 'order');
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const itemsTotal = order.reduce((acc, item) => acc + item.totalQuantity, 0);
   const formattedSubtotal = priceFormatter(
@@ -21,28 +37,25 @@ const Header = () => {
 
   return (
     <>
-      <AppBar position="fixed" color="primary" style={{ width: '100%' }}>
-        <Toolbar
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-            padding: '0 70px',
-          }}
-        >
+      <StyledAppBar color="primary">
+        <StyledToolbar>
           <img
             src="https://santex.wpengine.com/wp-content/uploads/2019/02/logo-santex@3x.png"
             alt="logo"
             style={{ height: '30px' }}
           />
           <Typography variant="body1">{formattedSubtotal}</Typography>
-          <IconButton color="inherit" onClick={handleToggleDrawer}>
+          <IconButton
+            color="inherit"
+            onClick={handleToggleDrawer}
+            sx={{ height: '50px', width: '50px' }}
+          >
             <Badge badgeContent={itemsTotal} color="error">
               <ShoppingCartRoundedIcon />
             </Badge>
           </IconButton>
-        </Toolbar>
-      </AppBar>
+        </StyledToolbar>
+      </StyledAppBar>
       <CustomDrawer
         itemsTotal={itemsTotal}
         isOpen={isDrawerOpen}

@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_ITEM_TO_ORDER } from '../graphql/mutations';
+import { useOrder } from '../contextAPI/OrderContext';
+import priceFormatter from '../utils/priceFormatter';
+import { Product } from '../utils/types';
+import PrimaryButton from './common/PrimaryButton';
+import IncrementButton from './common/IncrementButton';
+
+import styled from 'styled-components';
 import {
   Alert,
-  Button,
   Typography,
   Card,
   CardContent,
@@ -9,17 +17,8 @@ import {
   CardActions,
   Snackbar,
 } from '@mui/material';
-import { useMutation } from '@apollo/client';
-import { ADD_ITEM_TO_ORDER } from '../graphql/mutations';
-
 import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
 import { useTheme } from '@mui/material/styles';
-import { styled } from '@mui/system';
-import { useOrder } from '../contextAPI/OrderContext';
-import priceFormatter from '../utils/priceFormatter';
-
-import IncrementButton from './IncrementButton';
-import { ProductVariant, Product, OrderContextType } from '../utils/types';
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -43,6 +42,25 @@ const StyledDescription = styled(Typography)`
   -webkit-line-clamp: 3;
 `;
 
+const StyledCardContent = styled(CardContent)`
+  flex-grow: 1;
+`;
+
+const StyledCardActions = styled(CardActions)`
+  height: 3rem;
+  align-items: center;
+  justify-content: space-evenly;
+`;
+
+const StyledCardMedia = styled(CardMedia)`
+  height: 10rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  object-position: center;
+  margin-bottom: 1.5rem;
+`;
+
 const ProductCard = ({ product }: { product: Product }) => {
   const { addItemToOrder, setOrder, order } = useOrder();
 
@@ -56,7 +74,9 @@ const ProductCard = ({ product }: { product: Product }) => {
     product.variants[0]?.price,
     product.variants[0]?.currencyCode
   );
-  const isProductInStock = product.variants[0]?.stockLevel === 'IN_STOCK';
+  const disabled = product.variants[0]?.stockLevel !== 'IN_STOCK';
+  const productImage =
+    product.assets && product.assets.length > 0 && product.assets[0]?.source;
 
   const handleIncrement = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -68,6 +88,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   const handleAddToOrder = async (productId: string, quantity: number) => {
+    if (quantity === 0) return;
     try {
       await addItemToOrderMutation({
         variables: { productVariantId: productId, quantity: quantity },
@@ -120,31 +141,18 @@ const ProductCard = ({ product }: { product: Product }) => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <Alert icon={false} sx={{ backgroundColor: customBackgroundColor }}>
-          Item was successfully added to the cart
+          Item was successfully added to the cart!
         </Alert>
       </Snackbar>
       <StyledCard>
-        <CardContent>
-          <CardMedia>
-            {product.assets && product.assets.length > 0 && (
-              <img
-                src={product.assets[0]?.source}
-                alt={product.name}
-                style={{
-                  height: '10rem',
-                  width: '100%',
-                  borderRadius: '0.5rem',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  marginBottom: '1.5rem',
-                }}
-              />
-            )}
-          </CardMedia>
+        <StyledCardContent>
+          {productImage && (
+            <StyledCardMedia image={productImage} title={product.name} />
+          )}
           <Typography variant="h6" gutterBottom>
             {product.name}
           </Typography>
-          {!isProductInStock && (
+          {disabled && (
             <Typography color="primary" variant="body1">
               No Stock
             </Typography>
@@ -155,31 +163,21 @@ const ProductCard = ({ product }: { product: Product }) => {
           <StyledDescription variant="body2" gutterBottom>
             {product.description}
           </StyledDescription>
-        </CardContent>
-        <CardActions
-          sx={{
-            height: '3rem',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-          }}
-        >
+        </StyledCardContent>
+        <StyledCardActions>
           <IncrementButton
             quantity={quantity}
             onIncrement={handleIncrement}
             onDecrement={handleDecrement}
-            disabled={!isProductInStock}
+            disabled={disabled}
           />
-          <Button
-            variant="contained"
-            color="secondary"
+          <PrimaryButton
+            disabled={disabled}
             onClick={() => handleAddToOrder(product.id, quantity)}
-            disabled={!isProductInStock}
-            sx={{ borderRadius: '2rem' }}
-          >
-            <AddShoppingCartRoundedIcon />
-            Add
-          </Button>
-        </CardActions>
+            icon={<AddShoppingCartRoundedIcon />}
+            text="Add"
+          />
+        </StyledCardActions>
       </StyledCard>
     </>
   );

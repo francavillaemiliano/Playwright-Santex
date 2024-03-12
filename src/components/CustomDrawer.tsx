@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+import { useOrder } from '../contextAPI/OrderContext';
+import priceFormatter from '../utils/priceFormatter';
+import CustomDialog from './CustomDialog';
+import PrimaryButton from './common/PrimaryButton';
+
 import {
   Box,
   Button,
@@ -8,17 +13,12 @@ import {
   List,
   ListItem,
   ListItemText,
-  Dialog,
-  DialogActions,
-  DialogContent,
   Paper,
   Stack,
   Typography,
 } from '@mui/material';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
-import { useOrder } from '../contextAPI/OrderContext';
-import priceFormatter from '../utils/priceFormatter';
+import { CloseRounded, LocalMallOutlined } from '@mui/icons-material';
+import styled from 'styled-components';
 
 interface CustomDrawerProps {
   itemsTotal: number;
@@ -26,31 +26,56 @@ interface CustomDrawerProps {
   onClose: () => void;
 }
 
+const StyledDrawer = styled(Drawer)`
+  .MuiPaper-root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+`;
+
+const StyledIconButton = styled(IconButton)`
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  align-self: end;
+`;
+
+const StyledBox = styled(Box)`
+  height: 20%;
+  width: 21rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledList = styled(List)`
+  width: 100%;
+`;
+
+const StyledStack = styled(Stack)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2rem 0;
+  gap: 20px;
+`;
+
 const CustomDrawer: React.FC<CustomDrawerProps> = ({
   itemsTotal,
   isOpen,
   onClose,
 }) => {
   const { order, setOrder, totalPriceOrder, currency } = useOrder();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [itemIdToRemove, setItemIdToRemove] = useState<string | null>(null);
-
+  const [isConfirmDeleteOpen, SetIsConfirmDeleteOpen] = useState(false);
+  const [itemId, setItemId] = useState('');
   const formattedTotal = priceFormatter(totalPriceOrder, currency);
 
   const handleConfirmRemoveItem = (itemId: string) => {
-    setIsDialogOpen(true);
-    setItemIdToRemove(itemId);
-  };
-
-  const handleClose = () => {
-    setIsDialogOpen(false);
-    setItemIdToRemove(null);
-  };
-
-  const handleRemoveItemCart = (itemId: string) => {
-    const updatedOrder = order.filter((item) => item.id !== itemId);
-    setOrder(updatedOrder);
-    handleClose();
+    SetIsConfirmDeleteOpen(true);
+    setItemId(itemId);
   };
 
   const handleEmptyCart = () => {
@@ -66,48 +91,23 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
 
   return (
     <>
-      <Drawer anchor="right" open={isOpen} onClose={onClose}>
-        <Paper
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '25rem',
-            padding: '2rem',
-            height: '100%',
-          }}
-        >
-          <IconButton
-            sx={{ position: 'absolute', top: '1rem', right: '1rem' }}
-            onClick={onClose}
-          >
-            <CloseRoundedIcon color="primary" />
-          </IconButton>
-          {itemsTotal === 0 && (
-            <Box
-              sx={{
-                height: '20%',
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <LocalMallOutlinedIcon color="primary" />
-              <Typography variant="body1" sx={{ textAlign: 'center' }}>
-                There're no items in your
-              </Typography>
-              <Typography variant="body1" sx={{ textAlign: 'center' }}>
-                cart, add some
-              </Typography>
-            </Box>
-          )}
-          {itemsTotal !== 0 && (
+      <StyledDrawer anchor="right" open={isOpen} onClose={onClose}>
+        <Paper sx={{ padding: '20px' }}>
+          <StyledIconButton onClick={onClose}>
+            <CloseRounded color="primary" />
+          </StyledIconButton>
+          {itemsTotal === 0 ? (
+            <StyledBox>
+              <LocalMallOutlined color="primary" />
+              <Typography variant="body1">There're no items in your</Typography>
+              <Typography variant="body1">cart, add some</Typography>
+            </StyledBox>
+          ) : (
             <Box>
               <Typography key="order-title" variant="h6" gutterBottom>
                 Order:
               </Typography>
-              <List sx={{ width: '100%' }}>
+              <StyledList>
                 <ListItem
                   key={itemsTotal}
                   sx={{
@@ -119,7 +119,6 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
                   <ListItemText>Description:</ListItemText>
                   <ListItemText>Subtotal:</ListItemText>
                 </ListItem>
-
                 {order.map((item) => {
                   const formattedSubtotal = priceFormatter(
                     item.subtotal,
@@ -136,7 +135,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
                             sx={{ height: '30px', width: '30px' }}
                             onClick={() => handleConfirmRemoveItem(item.id)}
                           >
-                            <CloseRoundedIcon />
+                            <CloseRounded />
                           </IconButton>
                         }
                         sx={{
@@ -156,73 +155,34 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
                     </>
                   );
                 })}
-              </List>
+              </StyledList>
               <Typography variant="h6" sx={{ textAlign: 'right', mr: '2rem' }}>
                 Total: {formattedTotal}
               </Typography>
-              <Stack
-                direction="column"
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-              >
-                <Button
-                  variant="contained"
-                  color="secondary"
+              <StyledStack>
+                <PrimaryButton
                   onClick={handleBuyProducts}
-                  sx={{
-                    borderRadius: '2rem',
-                    marginTop: '1rem',
-                    width: '60%',
-                  }}
-                >
-                  Buy
-                </Button>
+                  text="Confirm Order"
+                />
                 <Button
                   variant="text"
                   color="primary"
-                  sx={{
-                    marginTop: '1rem',
-                  }}
                   onClick={handleEmptyCart}
                 >
                   Empty Cart
                 </Button>
-              </Stack>
+              </StyledStack>
             </Box>
           )}
         </Paper>
-      </Drawer>
-      {isDialogOpen && (
-        <Dialog open={isDialogOpen} onClose={handleClose}>
-          <DialogContent>
-            Are you sure you want to remove item/s:{' '}
-            {itemIdToRemove && (
-              <strong>
-                {order.find((item) => item.id === itemIdToRemove)?.name}
-              </strong>
-            )}{' '}
-            from cart ?
-          </DialogContent>
-          <DialogActions>
-            <Button variant="text" onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              sx={{ borderRadius: '2rem' }}
-              onClick={() =>
-                itemIdToRemove && handleRemoveItemCart(itemIdToRemove)
-              }
-              autoFocus
-            >
-              Remove Items
-            </Button>
-          </DialogActions>
-        </Dialog>
+      </StyledDrawer>
+      {isConfirmDeleteOpen && (
+        <CustomDialog
+          isOpen={isConfirmDeleteOpen}
+          onClose={() => SetIsConfirmDeleteOpen(false)}
+          itemId={itemId}
+          onCartEmpty={() => onClose()}
+        />
       )}
     </>
   );
