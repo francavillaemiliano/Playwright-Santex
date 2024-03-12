@@ -1,15 +1,5 @@
 import { useState } from 'react';
 
-// interface Product {
-//   currency: string;
-//   id: string;
-//   name: string;
-//   total: number;
-//   subtotal: number;
-//   totalQuantity: number;
-//   variants: {};
-// }
-
 export function useStateWithStorage<Type>(
   key: string,
   initialValue: Type[]

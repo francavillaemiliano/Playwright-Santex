@@ -1,5 +1,3 @@
-import { RefObject } from 'react';
-
 export interface ProductVariant {
   id: string;
   price: number;

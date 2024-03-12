@@ -4,8 +4,8 @@ import ProductGrid from './components/ProductGrid';
 const App = () => {
   return (
     <>
-      <Header />
-      <ProductGrid />
+      <Header data-testid="header" />
+      <ProductGrid data-testid="product-grid" />
     </>
   );
 };
