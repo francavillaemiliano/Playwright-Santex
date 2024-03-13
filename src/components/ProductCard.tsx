@@ -10,6 +10,7 @@ import IncrementButton from './common/IncrementButton';
 import styled from 'styled-components';
 import {
   Alert,
+  Box,
   Typography,
   Card,
   CardContent,
@@ -59,6 +60,20 @@ const StyledCardMedia = styled(CardMedia)`
   object-fit: cover;
   object-position: center;
   margin-bottom: 1.5rem;
+`;
+
+const StyledBox = styled(Box)`
+  && {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightgrey;
+    color: darkgrey;
+    height: 10rem;
+    width: 100%;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const ProductCard = ({ product }: { product: Product }) => {
@@ -145,8 +160,10 @@ const ProductCard = ({ product }: { product: Product }) => {
       </Snackbar>
       <StyledCard>
         <StyledCardContent>
-          {productImage && (
+          {productImage ? (
             <StyledCardMedia image={productImage} title={product.name} />
+          ) : (
+            <StyledBox>No image</StyledBox>
           )}
           <Typography variant="h6" gutterBottom>
             {product.name}
