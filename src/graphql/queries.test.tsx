@@ -3,6 +3,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import ProductCard from '../components/ProductCard';
 import { GET_PRODUCTS } from './queries';
 import { Product } from '../utils/types';
+import { useMutation } from '@apollo/client';
 
 const mocks = [
   {
@@ -17,6 +18,7 @@ const mocks = [
               id: '1',
               name: 'Pencil',
               description: 'Lorem ipsum',
+              assets: [{ source: 'product-image.jpg' }],
               variants: [
                 {
                   id: '1',
@@ -42,4 +44,5 @@ it('renders data from GET_PRODUCTS query', async () => {
     </MockedProvider>
   );
   expect(await screen.findByText('Pencil')).toBeInTheDocument();
+  expect(screen.getByText('Lorem ipsum')).toBeInTheDocument();
 });

@@ -161,7 +161,11 @@ const ProductCard = ({ product }: { product: Product }) => {
       <StyledCard>
         <StyledCardContent>
           {productImage ? (
-            <StyledCardMedia image={productImage} title={product.name} />
+            <StyledCardMedia
+              data-testId="image-container"
+              image={productImage}
+              title={product.name}
+            />
           ) : (
             <StyledBox>No image</StyledBox>
           )}
