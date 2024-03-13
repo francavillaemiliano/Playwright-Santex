@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import useAddItemToOrder from '../../hooks/useAddItemToOrder';
-import { useOrder } from '../../contextAPI/OrderContext';
 import priceFormatter from '../../utils/priceFormatter';
 import { Product } from '../../utils/types';
 import PrimaryButton from '../common/PrimaryButton';
@@ -15,7 +14,7 @@ import {
   CardActions,
   Snackbar,
 } from '@mui/material';
-import { AddShoppingCartRounded } from '@mui/icons-material';
+import { AddShoppingCartRounded, Check } from '@mui/icons-material';
 import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 
@@ -77,8 +76,7 @@ const StyledBox = styled(Box)`
 const ProductCard = ({ product }: { product: Product }) => {
   const { sendOrder } = useAddItemToOrder();
   const theme = useTheme();
-
-  const customBackgroundColor = theme.palette.primary.light;
+  const customBackgroundColor = theme.palette.secondary.light;
   const [quantity, setQuantity] = useState<number>(0);
   const [alertOpen, setAlertOpen] = useState(false);
   const formattedPrice = priceFormatter(
@@ -116,7 +114,10 @@ const ProductCard = ({ product }: { product: Product }) => {
         onClose={() => setAlertOpen(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
-        <Alert icon={false} sx={{ backgroundColor: customBackgroundColor }}>
+        <Alert
+          icon={<Check color="primary" />}
+          sx={{ backgroundColor: customBackgroundColor }}
+        >
           Item was successfully added to the cart!
         </Alert>
       </Snackbar>

@@ -5,6 +5,7 @@ import { CustomDrawerProps } from '../../utils/types';
 import PrimaryButton from '../common/PrimaryButton';
 import CustomDialog from '../CustomDialog/CustomDialog';
 import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -14,11 +15,13 @@ import {
   ListItem,
   ListItemText,
   Paper,
+  Snackbar,
   Stack,
   Typography,
 } from '@mui/material';
-import { CloseRounded, LocalMallOutlined } from '@mui/icons-material';
+import { CloseRounded, LocalMallOutlined, Check } from '@mui/icons-material';
 import styled from 'styled-components';
+import { useTheme } from '@mui/material/styles';
 
 const StyledDrawer = styled(Drawer)`
   .MuiPaper-root {
@@ -64,8 +67,11 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
 }) => {
   const { order, setOrder, totalPriceOrder, currency } = useOrder();
   const [isConfirmDeleteOpen, SetIsConfirmDeleteOpen] = useState(false);
+  const [confirmationSend, setConfirmationSend] = useState(false);
   const [itemId, setItemId] = useState('');
   const formattedTotal = priceFormatter(totalPriceOrder, currency);
+  const theme = useTheme();
+  const customBackgroundColor = theme.palette.secondary.light;
 
   const handleConfirmRemoveItem = (itemId: string) => {
     SetIsConfirmDeleteOpen(true);
@@ -78,15 +84,27 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
   };
 
   const handleBuyProducts = async () => {
-    // terminamos el flujo de compra, vaciando la orden y cerrando el drawer
-    // agregar un mensaje de confirmacion de compra enviada!
-
+    setConfirmationSend(true);
     setOrder([]);
     onClose();
   };
-
+  console.log(confirmationSend, 'comprar');
   return (
     <>
+      <Snackbar
+        open={confirmationSend}
+        autoHideDuration={3000}
+        onClose={() => setConfirmationSend(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <Alert
+          icon={<Check color="primary" />}
+          sx={{ backgroundColor: customBackgroundColor }}
+        >
+          Your order was generated successfully!
+        </Alert>
+      </Snackbar>
+
       <StyledDrawer anchor="right" open={isOpen} onClose={onClose}>
         <Paper sx={{ padding: '20px' }}>
           <StyledIconButton onClick={onClose}>
