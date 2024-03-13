@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { ADD_ITEM_TO_ORDER } from '../../graphql/mutations';
+import useAddItemToOrder from '../../hooks/useAddItemToOrder';
 import { useOrder } from '../../contextAPI/OrderContext';
 import priceFormatter from '../../utils/priceFormatter';
 import { Product } from '../../utils/types';
@@ -76,8 +75,7 @@ const StyledBox = styled(Box)`
 `;
 
 const ProductCard = ({ product }: { product: Product }) => {
-  const { addItemToOrder, setOrder, order } = useOrder();
-  const [addItemToOrderMutation] = useMutation(ADD_ITEM_TO_ORDER);
+  const { sendOrder } = useAddItemToOrder();
   const theme = useTheme();
 
   const customBackgroundColor = theme.palette.primary.light;
@@ -99,43 +97,10 @@ const ProductCard = ({ product }: { product: Product }) => {
     setQuantity((prevQuantity) => prevQuantity - 1);
   };
 
-  const handleAddToOrder = async (productId: string, quantity: number) => {
+  const handleAddToOrder = async (product: Product, quantity: number) => {
     if (quantity === 0) return;
     try {
-      await addItemToOrderMutation({
-        variables: { productVariantId: productId, quantity: quantity },
-      });
-
-      const duplicatedItemIndex = order.findIndex(
-        (item) => item.id === product.id
-      );
-
-      if (duplicatedItemIndex !== -1) {
-        const duplicatedItem = order[duplicatedItemIndex];
-        const updatedQuantity = duplicatedItem.totalQuantity + quantity;
-        const updatedSubtotal = product.variants[0]?.price * updatedQuantity;
-
-        const updatedItem = {
-          ...duplicatedItem,
-          totalQuantity: updatedQuantity,
-          subtotal: updatedSubtotal,
-        };
-
-        const updatedOrder = [...order];
-        updatedOrder[duplicatedItemIndex] = updatedItem;
-        setOrder(updatedOrder);
-      } else {
-        const cartItem: Product = {
-          currency: product.variants[0]?.currencyCode,
-          id: product.id.toString(),
-          name: product.name,
-          total: product.variants[0]?.price,
-          subtotal: product.variants[0]?.price * quantity,
-          totalQuantity: quantity,
-          variants: product.variants,
-        };
-        addItemToOrder(cartItem);
-      }
+      sendOrder(product, quantity);
       setQuantity(0);
       setAlertOpen(true);
     } catch (error) {
@@ -164,7 +129,7 @@ const ProductCard = ({ product }: { product: Product }) => {
               title={product.name}
             />
           ) : (
-            <StyledBox data-testid="image-placeholder">No image</StyledBox>
+            <StyledBox data-testid="image-container">No image</StyledBox>
           )}
           <Typography variant="h6" gutterBottom>
             {product.name}
@@ -183,7 +148,7 @@ const ProductCard = ({ product }: { product: Product }) => {
             onDecrement={handleDecrement}
           />
           <PrimaryButton
-            onClick={() => handleAddToOrder(product.id, quantity)}
+            onClick={() => handleAddToOrder(product, quantity)}
             icon={<AddShoppingCartRounded />}
             text="Add"
           />
