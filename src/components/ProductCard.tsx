@@ -162,7 +162,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         <StyledCardContent>
           {productImage ? (
             <StyledCardMedia
-              data-testId="image-container"
+              data-testid="image-container"
               image={productImage}
               title={product.name}
             />

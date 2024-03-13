@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS } from '../graphql/queries';
 import { Product } from '../utils/types';
@@ -13,7 +13,6 @@ import {
   Typography,
 } from '@mui/material';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
-import { Page } from '../utils/types';
 
 const StyledContainer = styled(Container)`
   margin: 5rem auto;
