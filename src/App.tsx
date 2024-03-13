@@ -1,5 +1,5 @@
-import Header from './components/Header';
-import ProductGrid from './components/ProductGrid';
+import Header from './components/Header/Header';
+import ProductGrid from './components/Grids/ProductGrid';
 
 const App = () => {
   return (

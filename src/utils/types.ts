@@ -1,3 +1,5 @@
+import { ButtonProps } from '@mui/material';
+
 export interface ProductVariant {
   id: string;
   price: number;
@@ -34,4 +36,29 @@ export interface Page {
   currentPage: number;
   totalPages: number;
   onPageChange?: (newPage: number) => void;
+}
+
+export interface CustomDrawerProps {
+  itemsTotal: number;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface IncrementButtonProps {
+  quantity: number;
+  onIncrement: () => void;
+  onDecrement: () => void;
+}
+
+export interface PrimaryButtonProps extends ButtonProps {
+  disabled?: boolean;
+  icon?: React.ReactNode;
+  text: string;
+}
+
+export interface ConfirmationDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  itemId: string;
+  onCartEmpty: () => void;
 }

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import CustomDrawer from './CustomDrawer';
 
-jest.mock('../contextAPI/OrderContext', () => ({
+jest.mock('../../contextAPI/OrderContext', () => ({
   useOrder: () => ({
     order: [
       {

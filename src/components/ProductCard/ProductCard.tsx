@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { ADD_ITEM_TO_ORDER } from '../graphql/mutations';
-import { useOrder } from '../contextAPI/OrderContext';
-import priceFormatter from '../utils/priceFormatter';
-import { Product } from '../utils/types';
-import PrimaryButton from './common/PrimaryButton';
-import IncrementButton from './common/IncrementButton';
-
-import styled from 'styled-components';
+import { ADD_ITEM_TO_ORDER } from '../../graphql/mutations';
+import { useOrder } from '../../contextAPI/OrderContext';
+import priceFormatter from '../../utils/priceFormatter';
+import { Product } from '../../utils/types';
+import PrimaryButton from '../common/PrimaryButton';
+import IncrementButton from '../common/IncrementButton';
 import {
   Alert,
   Box,
@@ -18,7 +16,8 @@ import {
   CardActions,
   Snackbar,
 } from '@mui/material';
-import AddShoppingCartRoundedIcon from '@mui/icons-material/AddShoppingCartRounded';
+import { AddShoppingCartRounded } from '@mui/icons-material';
+import styled from 'styled-components';
 import { useTheme } from '@mui/material/styles';
 
 const StyledCard = styled(Card)`
@@ -78,7 +77,6 @@ const StyledBox = styled(Box)`
 
 const ProductCard = ({ product }: { product: Product }) => {
   const { addItemToOrder, setOrder, order } = useOrder();
-
   const [addItemToOrderMutation] = useMutation(ADD_ITEM_TO_ORDER);
   const theme = useTheme();
 
@@ -138,7 +136,6 @@ const ProductCard = ({ product }: { product: Product }) => {
         };
         addItemToOrder(cartItem);
       }
-
       setQuantity(0);
       setAlertOpen(true);
     } catch (error) {
@@ -167,7 +164,7 @@ const ProductCard = ({ product }: { product: Product }) => {
               title={product.name}
             />
           ) : (
-            <StyledBox>No image</StyledBox>
+            <StyledBox data-testid="image-placeholder">No image</StyledBox>
           )}
           <Typography variant="h6" gutterBottom>
             {product.name}
@@ -187,7 +184,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           />
           <PrimaryButton
             onClick={() => handleAddToOrder(product.id, quantity)}
-            icon={<AddShoppingCartRoundedIcon />}
+            icon={<AddShoppingCartRounded />}
             text="Add"
           />
         </StyledCardActions>

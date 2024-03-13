@@ -4,7 +4,7 @@ import DesktopGrid from './DesktopGrid';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 const ProductGrid = () => {
-  const isMobile = useMediaQuery('(max-width:767px)');
+  const isMobile = useMediaQuery('(max-width:768px)');
 
   return isMobile ? <MobileGrid /> : <DesktopGrid />;
 };

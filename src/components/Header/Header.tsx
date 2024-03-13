@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-
-import { useOrder } from '../contextAPI/OrderContext';
-import priceFormatter from '../utils/priceFormatter';
-import CustomDrawer from './CustomDrawer';
-
+import { useOrder } from '../../contextAPI/OrderContext';
+import priceFormatter from '../../utils/priceFormatter';
+import CustomDrawer from '../CustomDrawer/CustomDrawer';
 import { AppBar, Badge, IconButton, Toolbar, Typography } from '@mui/material';
-import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
+import { ShoppingCartRounded } from '@mui/icons-material';
 import styled from 'styled-components';
 
 const StyledAppBar = styled(AppBar)`
@@ -24,7 +22,6 @@ const StyledToolbar = styled(Toolbar)`
 
 const Header = () => {
   const { order } = useOrder();
-
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const itemsTotal =
     order.reduce((acc, item) => acc + item.totalQuantity, 0) || 0;
@@ -52,7 +49,7 @@ const Header = () => {
             sx={{ height: '50px', width: '50px' }}
           >
             <Badge badgeContent={itemsTotal} color="error">
-              <ShoppingCartRoundedIcon />
+              <ShoppingCartRounded />
             </Badge>
           </IconButton>
         </StyledToolbar>

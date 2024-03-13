@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_PRODUCTS } from '../graphql/queries';
-import { Product } from '../utils/types';
-import ProductCard from './ProductCard';
-import styled from 'styled-components';
+import { GET_PRODUCTS } from '../../graphql/queries';
+import { Product } from '../../utils/types';
+import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import ProductCard from '../ProductCard/ProductCard';
 import {
   Box,
   Container,
@@ -12,7 +12,7 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material';
-import useInfiniteScroll from '../hooks/useInfiniteScroll';
+import styled from 'styled-components';
 
 const StyledContainer = styled(Container)`
   margin: 5rem auto;

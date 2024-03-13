@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_PRODUCTS } from '../graphql/queries';
-import { Product } from '../utils/types';
-import ProductCard from './ProductCard';
-import ProductPagination from './common/ProductPagination';
-import styled from 'styled-components';
+import { GET_PRODUCTS } from '../../graphql/queries';
+import { Product } from '../../utils/types';
+import ProductCard from '../ProductCard/ProductCard';
+import ProductPagination from '../common/ProductPagination';
 import {
   Box,
   Container,
@@ -12,6 +11,7 @@ import {
   LinearProgress,
   Typography,
 } from '@mui/material';
+import styled from 'styled-components';
 
 const StyledContainer = styled(Container)`
   margin: 5rem auto;

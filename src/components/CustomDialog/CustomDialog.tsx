@@ -1,14 +1,8 @@
 import React from 'react';
-import { useOrder } from '../contextAPI/OrderContext';
+import { useOrder } from '../../contextAPI/OrderContext';
+import { ConfirmationDialogProps } from '../../utils/types';
+import PrimaryButton from '../common/PrimaryButton';
 import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
-import PrimaryButton from './common/PrimaryButton';
-
-interface ConfirmationDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
-  itemId: string;
-  onCartEmpty: () => void;
-}
 
 const CustomDialog: React.FC<ConfirmationDialogProps> = ({
   isOpen,

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useOrder } from '../contextAPI/OrderContext';
-import priceFormatter from '../utils/priceFormatter';
-import CustomDialog from './CustomDialog';
-import PrimaryButton from './common/PrimaryButton';
-
+import { useOrder } from '../../contextAPI/OrderContext';
+import priceFormatter from '../../utils/priceFormatter';
+import { CustomDrawerProps } from '../../utils/types';
+import PrimaryButton from '../common/PrimaryButton';
+import CustomDialog from '../CustomDialog/CustomDialog';
 import {
   Box,
   Button,
@@ -19,12 +19,6 @@ import {
 } from '@mui/material';
 import { CloseRounded, LocalMallOutlined } from '@mui/icons-material';
 import styled from 'styled-components';
-
-interface CustomDrawerProps {
-  itemsTotal: number;
-  isOpen: boolean;
-  onClose: () => void;
-}
 
 const StyledDrawer = styled(Drawer)`
   .MuiPaper-root {

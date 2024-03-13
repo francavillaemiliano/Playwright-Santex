@@ -1,9 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import ProductCard from '../components/ProductCard';
 import { GET_PRODUCTS } from './queries';
 import { Product } from '../utils/types';
-import { useMutation } from '@apollo/client';
+import ProductCard from '../components/ProductCard/ProductCard';
 
 const mocks = [
   {

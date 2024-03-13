@@ -1,13 +1,7 @@
 import React from 'react';
 import { IconButton, Typography, Stack } from '@mui/material';
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
-
-interface IncrementButtonProps {
-  quantity: number;
-  onIncrement: () => void;
-  onDecrement: () => void;
-}
+import { Remove, Add } from '@mui/icons-material';
+import { IncrementButtonProps } from '../../utils/types';
 
 const IncrementButton: React.FC<IncrementButtonProps> = ({
   quantity,
@@ -17,11 +11,11 @@ const IncrementButton: React.FC<IncrementButtonProps> = ({
   return (
     <Stack direction="row" alignItems="center">
       <IconButton onClick={onDecrement}>
-        <RemoveIcon />
+        <Remove />
       </IconButton>
       <Typography>{quantity}</Typography>
       <IconButton onClick={onIncrement}>
-        <AddIcon />
+        <Add />
       </IconButton>
     </Stack>
   );

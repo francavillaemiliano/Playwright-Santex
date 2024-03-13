@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import Header from './Header';
 
-jest.mock('../contextAPI/OrderContext', () => ({
+jest.mock('../../contextAPI/OrderContext', () => ({
   useOrder: () => {
     return { order: [{ subtotal: 10000, currency: 'USD' }] };
   },

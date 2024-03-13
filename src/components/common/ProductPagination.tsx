@@ -1,6 +1,6 @@
 import React from 'react';
-import { Pagination } from '@mui/material';
 import { Page } from '../../utils/types';
+import { Pagination } from '@mui/material';
 
 const ProductPagination: React.FC<Page> = ({
   currentPage,
