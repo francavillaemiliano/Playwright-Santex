@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useOrder } from '../contextAPI/OrderContext';
 import priceFormatter from '../utils/priceFormatter';
@@ -25,8 +25,9 @@ const StyledToolbar = styled(Toolbar)`
 const Header = () => {
   const { order } = useOrder();
 
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-  const itemsTotal = order.reduce((acc, item) => acc + item.totalQuantity, 0);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const itemsTotal =
+    order.reduce((acc, item) => acc + item.totalQuantity, 0) || 0;
   const formattedSubtotal = priceFormatter(
     order.reduce((acc, item) => acc + item.subtotal, 0),
     order.length > 0 ? order[0]?.currency : ''
@@ -65,4 +66,4 @@ const Header = () => {
   );
 };
 
-export { Header };
+export default Header;

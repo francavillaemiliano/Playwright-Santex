@@ -7,22 +7,20 @@ interface IncrementButtonProps {
   quantity: number;
   onIncrement: () => void;
   onDecrement: () => void;
-  disabled: boolean;
 }
 
 const IncrementButton: React.FC<IncrementButtonProps> = ({
   quantity,
   onIncrement,
   onDecrement,
-  disabled,
 }) => {
   return (
     <Stack direction="row" alignItems="center">
-      <IconButton onClick={onDecrement} disabled={disabled}>
+      <IconButton onClick={onDecrement}>
         <RemoveIcon />
       </IconButton>
       <Typography>{quantity}</Typography>
-      <IconButton onClick={onIncrement} disabled={disabled}>
+      <IconButton onClick={onIncrement}>
         <AddIcon />
       </IconButton>
     </Stack>

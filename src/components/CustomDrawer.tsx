@@ -85,8 +85,10 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
 
   const handleBuyProducts = async () => {
     // terminamos el flujo de compra, vaciando la orden y cerrando el drawer
-    onClose();
+    // agregar un mensaje de confirmacion de compra enviada!
+
     setOrder([]);
+    onClose();
   };
 
   return (
@@ -104,12 +106,10 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
             </StyledBox>
           ) : (
             <Box>
-              <Typography key="order-title" variant="h6" gutterBottom>
-                Order:
-              </Typography>
+              <Typography>Order:</Typography>
               <StyledList>
                 <ListItem
-                  key={itemsTotal}
+                  key={itemId}
                   sx={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(2, 1fr)',
@@ -126,7 +126,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
                   );
 
                   return (
-                    <>
+                    <React.Fragment key={`fragment-${item.id}`}>
                       <ListItem
                         key={item.id}
                         secondaryAction={
@@ -152,7 +152,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
                         </Typography>
                       </ListItem>
                       <Divider key={`divider-${item.id}`} />
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </StyledList>
@@ -176,14 +176,12 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
           )}
         </Paper>
       </StyledDrawer>
-      {isConfirmDeleteOpen && (
-        <CustomDialog
-          isOpen={isConfirmDeleteOpen}
-          onClose={() => SetIsConfirmDeleteOpen(false)}
-          itemId={itemId}
-          onCartEmpty={() => onClose()}
-        />
-      )}
+      <CustomDialog
+        isOpen={isConfirmDeleteOpen}
+        onClose={() => SetIsConfirmDeleteOpen(false)}
+        itemId={itemId}
+        onCartEmpty={() => onClose()}
+      />
     </>
   );
 };

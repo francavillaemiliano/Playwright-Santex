@@ -6,7 +6,7 @@ import PrimaryButton from './common/PrimaryButton';
 interface ConfirmationDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  itemId: string | undefined;
+  itemId: string;
   onCartEmpty: () => void;
 }
 
@@ -18,33 +18,29 @@ const CustomDialog: React.FC<ConfirmationDialogProps> = ({
 }) => {
   const { order, setOrder } = useOrder();
 
-  const handleClose = () => {
-    onClose();
-  };
-
   const handleRemoveItemCart = (itemIdToRemove: string) => {
     const updatedOrder = order.filter((item) => item.id !== itemIdToRemove);
     setOrder(updatedOrder);
     if (updatedOrder.length === 0) {
       onCartEmpty();
     }
-    handleClose();
+    onClose();
   };
 
-  const itemName = itemId ? order.find((item) => item.id === itemId)?.name : '';
+  const itemName = order.find((item) => item.id === itemId)?.name;
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
       <DialogContent>
-        Are you sure you want to remove item/s:{' '}
-        {itemId ? <strong>{itemName}</strong> : ''} from cart?
+        Are you sure you want to remove item/s:
+        <strong>{itemName}</strong> from cart?
       </DialogContent>
       <DialogActions>
-        <Button variant="text" onClick={handleClose}>
+        <Button variant="text" onClick={onClose}>
           Cancel
         </Button>
         <PrimaryButton
-          onClick={() => itemId && handleRemoveItemCart(itemId)}
+          onClick={() => handleRemoveItemCart(itemId)}
           text="Remove Item"
         />
       </DialogActions>

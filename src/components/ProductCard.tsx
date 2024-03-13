@@ -71,10 +71,9 @@ const ProductCard = ({ product }: { product: Product }) => {
   const [quantity, setQuantity] = useState<number>(0);
   const [alertOpen, setAlertOpen] = useState(false);
   const formattedPrice = priceFormatter(
-    product.variants[0]?.price,
-    product.variants[0]?.currencyCode
+    product.variants?.[0]?.price,
+    product.variants?.[0]?.currencyCode
   );
-  const disabled = product.variants[0]?.stockLevel !== 'IN_STOCK';
   const productImage =
     product.assets && product.assets.length > 0 && product.assets[0]?.source;
 
@@ -152,11 +151,6 @@ const ProductCard = ({ product }: { product: Product }) => {
           <Typography variant="h6" gutterBottom>
             {product.name}
           </Typography>
-          {disabled && (
-            <Typography color="primary" variant="body1">
-              No Stock
-            </Typography>
-          )}
           <Typography variant="body1" gutterBottom>
             {formattedPrice}
           </Typography>
@@ -169,10 +163,8 @@ const ProductCard = ({ product }: { product: Product }) => {
             quantity={quantity}
             onIncrement={handleIncrement}
             onDecrement={handleDecrement}
-            disabled={disabled}
           />
           <PrimaryButton
-            disabled={disabled}
             onClick={() => handleAddToOrder(product.id, quantity)}
             icon={<AddShoppingCartRoundedIcon />}
             text="Add"

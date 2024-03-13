@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const ORDER_FRAGMENT = gql`
+export const ORDER_FRAGMENT = gql`
   fragment OrderFragment on Order {
     id
     totalQuantity
