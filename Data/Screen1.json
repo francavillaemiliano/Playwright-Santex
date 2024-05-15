@@ -1,0 +1,61 @@
+[{
+    "productName": "Laptop",
+    "productPrice": "$1,299.00",
+    "productDescription": "Now equipped with seventh-generation Intel Core processors, Laptop is snappier than ever. From daily tasks like launching apps and opening files to more advanced computing, you can power through your day thanks to faster SSDs and Turbo Boost processing up to 3.6GHz."
+},
+{
+    "productName":"Tablet",
+    "productPrice": "$329.00",
+    "productDescription": "If the computer were invented today, what would it look like? It would be powerful enough for any task. So mobile you could take it everywhere. And so intuitive you could use it any way you wanted — with touch, a keyboard, or even a pencil. In other words, it wouldn’t really be a \"computer.\" It would be Tablet."
+},
+{
+    "productName":"Wireless Optical Mouse",
+    "productPrice":"$18.99",
+    "productDescription":"The Logitech M185 Wireless Optical Mouse is a great device for any computer user, and as Logitech are the global market leaders for these devices, you are also guaranteed absolute reliability. A mouse to be reckoned with!"
+},
+{
+    "productName":"32-Inch Monitor",
+    "productPrice":"$310.00",
+    "productDescription":"The UJ59 with Ultra HD resolution has 4x the pixels of Full HD, delivering more screen space and amazingly life-like images. That means you can view documents and webpages with less scrolling, work more comfortably with multiple windows and toolbars, and enjoy photos, videos and games in stunning 4K quality. Note: beverage not included."
+},
+{
+    "productName":"Curvy Monitor",
+    "productPrice":"$143.74",
+    "productDescription":"Discover a truly immersive viewing experience with this monitor curved more deeply than any other. Wrapping around your field of vision the 1,800 R screencreates a wider field of view, enhances depth perception, and minimises peripheral distractions to draw you deeper in to your content."
+},
+{
+    "productName":"High Performance RAM",
+    "productPrice":"$137.85",
+    "productDescription":"Each RAM module is built with a pure aluminium heat spreader for faster heat dissipation and cooler operation. Enhanced to XMP 2.0 profiles for better overclocking; Compatibility: Intel 100 Series, Intel 200 Series, Intel 300 Series, Intel X299, AMD 300 Series, AMD 400 Series."
+},
+{
+    "productName":"Gaming PC",
+    "productPrice":"$1,087.20",
+    "productDescription":"This pc is optimised for gaming, and is also VR ready. The Intel Core-i7 CPU and High Performance GPU give the computer the raw power it needs to function at a high level."
+},
+{
+    "productName":"Hard Drive",
+    "productPrice":"$37.99",
+    "productDescription":"Boost your PC storage with this internal hard drive, designed just for desktop and all-in-one PCs."
+},
+{
+    "productName":"Clacky Keyboard",
+    "productPrice":"$74.89",
+    "productDescription":"Let all your colleagues know that you are typing on this exclusive, colorful klicky-klacky keyboard. Huge travel on each keypress ensures maximum klack on each and every keystroke."
+},
+{
+    "productName":"Ethernet Cable",
+    "productPrice":"$5.97",
+    "productDescription":"5m (metres) Cat.6 network cable (upwards/downwards compatible) | Patch cable | 2 RJ-45 plug | plug with bend protection mantle. High transmission speeds due to operating frequency with up to 250 MHz (in comparison to Cat.5/Cat.5e cable bandwidth of 100 MHz)."
+},
+{
+    "productName":"USB Cable",
+    "productPrice":"$69.00",
+    "productDescription":"Solid conductors eliminate strand-interaction distortion and reduce jitter. As the surface is made of high-purity silver, the performance is very close to that of a solid silver cable, but priced much closer to solid copper cable."
+},
+{
+    "productName":"Instant Camera",
+    "productPrice":"$174.99",
+    "productDescription":"With its nostalgic design and simple point-and-shoot functionality, the Instant Camera is the perfect pick to get started with instant photography."
+}
+]

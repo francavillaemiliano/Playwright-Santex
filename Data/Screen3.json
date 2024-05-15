@@ -1,0 +1,62 @@
+[
+{
+    "productName": "Cruiser Skateboard",
+    "productPrice": "$24.99",
+    "productDescription": "Based on the 1970s iconic shape, but made to a larger 69cm size, with updated, quality component, these skateboards are great for beginners to learn the foot spacing required, and are perfect for all-day cruising."
+},
+{
+    "productName": "Football",
+    "productPrice": "$57.07",
+    "productDescription": "This football features high-contrast graphics for high-visibility during play, while its machine-stitched tpu casing offers consistent performance."
+},
+{
+    "productName": "Tennis Ball",
+    "productPrice": "$12.73",
+    "productDescription": "Our dog loves these tennis balls and they last for some time before they eventually either get lost in some field or bush or the covering comes off due to it being used most of the day every day."
+},
+{
+    "productName": "Basketball",
+    "productPrice": "$35.62",
+    "productDescription": "The Wilson MVP ball is perfect for playing basketball, and improving your skill for hours on end. Designed for new players, it is created with a high-quality rubber suitable for courts, allowing you to get full use during your practices."
+},
+{
+    "productName": "Ultraboost Running Shoe",
+    "productPrice": "$99.99",
+    "productDescription": "With its ultra-light, uber-responsive magic foam and a carbon fiber plate that feels like it’s propelling you forward, the Running Shoe is ready to push you to victories both large and small"
+},
+{
+    "productName": "Freerun Running Shoe",
+    "productPrice": "$160.00",
+    "productDescription": "The Freerun Men's Running Shoe is built for record-breaking speed. The Flyknit upper delivers ultra-lightweight support that fits like a glove."
+},
+{
+    "productName": "Hi-Top Basketball Shoe",
+    "productPrice": "$140.00",
+    "productDescription": "Boasting legendary performance since 2008, the Hyperdunkz Basketball Shoe needs no gimmicks to stand out. Air units deliver best-in-class cushioning, while a dynamic lacing system keeps your foot snug and secure, so you can focus on your game and nothing else."
+},
+{
+    "productName": "Pureboost Running Shoe",
+    "productPrice": "$99.95",
+    "productDescription": "Built to handle curbs, corners and uneven sidewalks, these natural running shoes have an expanded landing zone and a heel plate for added stability. A lightweight and stretchy knit upper supports your native stride."
+},
+{
+    "productName": "RunX Running Shoe",
+    "productPrice": "$44.95",
+    "productDescription": "These running shoes are made with an airy, lightweight mesh upper. The durable rubber outsole grips the pavement for added stability. A cushioned midsole brings comfort to each step."
+},
+{
+    "productName": "Allstar Sneakers",
+    "productPrice": "$65.00",
+    "productDescription": "All Star is the most iconic sneaker in the world, recognised for its unmistakable silhouette, star-centred ankle patch and cultural authenticity. And like the best paradigms, it only gets better with time."
+},
+{
+    "productName": "Spiky Cactus",
+    "productPrice": "$15.50",
+    "productDescription": "A spiky yet elegant house cactus - perfect for the home or office. Origin and habitat: Probably native only to the Andes of Peru"
+},
+{
+    "productName": "Tulip Pot",
+    "productPrice": "$6.75",
+    "productDescription": "Bright crimson red species tulip with black centers, the poppy-like flowers will open up in full sun. Ideal for rock gardens, pots and border edging."
+}
+]
