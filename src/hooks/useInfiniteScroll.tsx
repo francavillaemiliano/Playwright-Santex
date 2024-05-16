@@ -14,10 +14,10 @@ const useInfiniteScroll = (
     }
   };
 
-  // useEffect(() => {
-  //   if (!isFetching) return;
-  //   callback();
-  // }, [isFetching]);
+  useEffect(() => {
+    if (!isFetching) return;
+    callback();
+  }, [isFetching]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
